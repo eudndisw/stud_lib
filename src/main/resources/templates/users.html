@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Читачі')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 class="page-title">Список читачів</h1>
+    <div class="table-responsive">
+    <table class="table table-striped align-middle bg-white">
+        <thead>
+            <tr><th>ID</th><th>Ім’я</th><th>Прізвище</th><th>Група</th><th>Email</th><th>Роль</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.userId}">1</td>
+                <td th:text="${user.firstName}">Софія</td>
+                <td th:text="${user.lastName}">Устілова</td>
+                <td th:text="${user.groupName}">ІО-45</td>
+                <td th:text="${user.email}">student@kpi.ua</td>
+                <td th:text="${user.role.roleName}">STUDENT</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</main>
+</body>
+</html>

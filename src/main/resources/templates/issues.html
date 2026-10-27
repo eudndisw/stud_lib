@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Видачі')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 class="page-title">Видача та повернення книг</h1>
+
+    <form th:action="@{/issues/issue}" method="post" class="row g-2 mb-4 align-items-end">
+        <div class="col-md-5">
+            <label for="userId" class="form-label">Читач</label>
+            <select id="userId" name="userId" class="form-select" required>
+                <option th:each="u : ${users}" th:value="${u.userId}"
+                        th:text="${u.fullName} + ' (' + ${u.email} + ')'">Читач</option>
+            </select>
+        </div>
+        <div class="col-md-5">
+            <label for="bookId" class="form-label">Книга</label>
+            <select id="bookId" name="bookId" class="form-select" required>
+                <option th:each="b : ${books}" th:value="${b.bookId}"
+                        th:text="${b.title} + ' (доступно: ' + ${b.availableQuantity} + ')'">Книга</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-lib w-100">Видати</button>
+        </div>
+    </form>
+
+    <h2 class="h5">Активні видачі</h2>
+    <div class="table-responsive">
+    <table class="table table-striped align-middle bg-white">
+        <thead><tr><th>ID</th><th>Читач</th><th>Книга</th><th>Дата видачі</th><th></th></tr></thead>
+        <tbody>
+            <tr th:each="issue : ${issues}">
+                <td th:text="${issue.issueId}">1</td>
+                <td th:text="${issue.user.fullName}">Софія Устілова</td>
+                <td th:text="${issue.book.title}">Чистий код</td>
+                <td th:text="${issue.issueDate}">2026-10-26</td>
+                <td class="text-end">
+                    <form th:action="@{/issues/{id}/return(id=${issue.issueId})}" method="post" class="mb-0">
+                        <button type="submit" class="btn btn-sm btn-outline-dark">Повернути</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(issues)}"><td colspan="5" class="text-muted">Активних видач немає.</td></tr>
+        </tbody>
+    </table>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Каталог книг')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 class="page-title">Каталог літератури</h1>
+    <div class="table-responsive">
+    <table class="table table-striped align-middle bg-white">
+        <thead>
+            <tr><th>ID</th><th>Назва</th><th>Автор</th><th>Категорія</th><th>Рік</th><th>Доступно</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.bookId}">1</td>
+                <td th:text="${book.title}">Чистий код</td>
+                <td th:text="${book.author != null} ? ${book.author.fullName} : '—'">Роберт Мартін</td>
+                <td th:text="${book.category != null} ? ${book.category.categoryName} : '—'">Програмування</td>
+                <td th:text="${book.year}">2008</td>
+                <td>
+                    <span th:if="${book.available}" class="badge text-bg-success"
+                          th:text="${book.availableQuantity} + ' з ' + ${book.totalQuantity}">5 з 5</span>
+                    <span th:unless="${book.available}" class="badge text-bg-secondary">Немає в наявності</span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(books)}"><td colspan="6" class="text-muted">Книг ще немає.</td></tr>
+        </tbody>
+    </table>
+    </div>
+</main>
+</body>
+</html>
