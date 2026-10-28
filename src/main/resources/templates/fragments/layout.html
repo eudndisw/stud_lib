@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Спільний <head>: підключається як ~{fragments/layout :: head('Назва сторінки')} -->
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' — Студентська бібліотека'">Студентська бібліотека</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<!-- Навігація з розмежуванням за ролями -->
+<nav th:fragment="navbar" class="navbar navbar-expand-md navbar-dark navbar-lib">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">Студентська бібліотека</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Меню">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/books}">Каталог</a></li>
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','LIBRARIAN')">
+                    <a class="nav-link" th:href="@{/issues}">Видачі</a></li>
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','LIBRARIAN')">
+                    <a class="nav-link" th:href="@{/authors}">Автори</a></li>
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','LIBRARIAN')">
+                    <a class="nav-link" th:href="@{/categories}">Категорії</a></li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/users}">Читачі</a></li>
+            </ul>
+            <form th:action="@{/logout}" method="post" class="d-flex align-items-center gap-3 mb-0"
+                  sec:authorize="isAuthenticated()">
+                <span class="navbar-text" sec:authentication="name">user</span>
+                <button type="submit" class="btn btn-sm btn-outline-light">Вийти</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!-- Flash-повідомлення про результат операції (НФВ: зворотний зв'язок) -->
+<div th:fragment="flash">
+    <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Головна')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 class="page-title">Вітаємо у студентській бібліотеці</h1>
+    <p>Ви увійшли як <strong sec:authentication="name">user</strong>.</p>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-lib" th:href="@{/books}">Каталог літератури</a>
+        <a class="btn btn-outline-dark" th:href="@{/issues}" sec:authorize="hasAnyRole('ADMIN','LIBRARIAN')">Видача та повернення</a>
+        <a class="btn btn-outline-dark" th:href="@{/users}" sec:authorize="hasRole('ADMIN')">Керування читачами</a>
+    </div>
+</main>
+</body>
+</html>

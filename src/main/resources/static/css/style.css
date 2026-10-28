@@ -1,0 +1,74 @@
+:root {
+    --lib-black: #000000;
+    --lib-white: #ffffff;
+    --lib-pink: #f8c8dc;
+    --lib-pink-deep: #f2aecb;
+    --lib-blue: #bde0fe;
+    --lib-blue-soft: #e8f4ff;
+}
+
+body { background: var(--lib-white); color: var(--lib-black); }
+
+.navbar-lib { background: var(--lib-black); }
+.navbar-lib .navbar-brand,
+.navbar-lib .nav-link { color: var(--lib-white); }
+.navbar-lib .nav-link:hover,
+.navbar-lib .nav-link:focus { color: var(--lib-pink); }
+.navbar-lib .navbar-text { color: var(--lib-blue); }
+
+.btn-lib {
+    background: var(--lib-pink);
+    border-color: var(--lib-pink);
+    color: var(--lib-black);
+}
+.btn-lib:hover,
+.btn-lib:focus {
+    background: var(--lib-pink-deep);
+    border-color: var(--lib-pink-deep);
+    color: var(--lib-black);
+}
+
+.btn-outline-dark {
+    --bs-btn-color: var(--lib-black);
+    --bs-btn-border-color: var(--lib-black);
+    --bs-btn-hover-bg: var(--lib-blue);
+    --bs-btn-hover-border-color: var(--lib-black);
+    --bs-btn-hover-color: var(--lib-black);
+    --bs-btn-active-bg: var(--lib-blue);
+    --bs-btn-active-border-color: var(--lib-black);
+    --bs-btn-active-color: var(--lib-black);
+}
+
+.table {
+    --bs-table-bg: var(--lib-white);
+    --bs-table-striped-bg: var(--lib-blue-soft);
+    --bs-table-striped-color: var(--lib-black);
+    color: var(--lib-black);
+}
+.table thead th {
+    background: var(--lib-blue);
+    border-bottom: 2px solid var(--lib-black);
+}
+
+.badge.text-bg-success   { background-color: #198754 !important; color: var(--lib-white) !important; }
+.badge.text-bg-secondary { background-color: #dc3545 !important; color: var(--lib-white) !important; }
+
+.alert-success {
+    --bs-alert-bg: #d1e7dd;
+    --bs-alert-border-color: #a3cfbb;
+    --bs-alert-color: #0a3622;
+}
+.alert-danger {
+    --bs-alert-bg: #f8d7da;
+    --bs-alert-border-color: #f1aeb5;
+    --bs-alert-color: #58151c;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--lib-blue);
+    box-shadow: 0 0 0 .25rem rgba(189, 224, 254, .6);
+}
+
+.page-title { font-size: 1.6rem; margin-bottom: 1.25rem; color: var(--lib-black); }
+.login-box { max-width: 380px; margin: 12vh auto 0; }
