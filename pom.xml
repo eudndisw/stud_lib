@@ -19,6 +19,9 @@
 
     <properties>
         <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Версії Spring, Hibernate, Thymeleaf, Jackson, Mockito, PostgreSQL JDBC тощо задає spring-boot-starter-parent (BOM),
+             тому вони завжди сумісні між собою. Явно перевизначено лише Lombok (підтримка нових версій JDK). -->
         <lombok.version>1.18.42</lombok.version>
     </properties>
 

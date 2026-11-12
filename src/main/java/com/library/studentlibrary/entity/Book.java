@@ -11,7 +11,11 @@ import lombok.Setter;
 
 /** Книга (одиниця бібліотечного фонду). */
 @Entity
-@Table(name = "books")
+@Table(name = "books", indexes = {
+        @Index(name = "idx_books_title", columnList = "title"),
+        @Index(name = "idx_books_author", columnList = "author_id"),
+        @Index(name = "idx_books_category", columnList = "category_id")
+})
 @Getter @Setter @NoArgsConstructor
 public class Book {
 

@@ -33,7 +33,8 @@ public class IssuedBookController {
     public String listIssues(Model model) {
         model.addAttribute("issues", issuedBookService.getActiveIssues());
         model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("books", bookService.getAllBooks());
+        model.addAttribute("books", bookService.getAvailableBooks());
+        model.addAttribute("limit", IssuedBookService.MAX_ACTIVE_ISSUES);
         return "issues";
     }
 

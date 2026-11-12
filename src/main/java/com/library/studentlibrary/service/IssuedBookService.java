@@ -11,9 +11,12 @@ public interface IssuedBookService {
 
     List<IssuedBook> getActiveIssues();
 
-    /** Видача книги: ліміт 5 книг, наявність примірника. */
+    /** Уся історія видач читача (активні й повернені). */
+    List<IssuedBook> getUserIssues(Integer userId);
+
+    /** Видача книги: ліміт 5 книг, наявність примірника, відсутність дубля. */
     void issueBook(Integer userId, Integer bookId);
 
-    /** Повернення книги */
+    /** Повернення книги: проставляє returnDate і збільшує availableQuantity. */
     void returnBook(Integer issueId);
 }

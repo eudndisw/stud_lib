@@ -9,7 +9,10 @@ import java.time.LocalDate;
 
 /** Запис про видачу книги читачу. */
 @Entity
-@Table(name = "issued_books")
+@Table(name = "issued_books", indexes = {
+        @Index(name = "idx_issued_user", columnList = "user_id"),
+        @Index(name = "idx_issued_book", columnList = "book_id")
+})
 @Getter @Setter @NoArgsConstructor
 public class IssuedBook {
 
