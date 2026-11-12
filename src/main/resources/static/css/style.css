@@ -72,3 +72,26 @@ body { background: var(--lib-white); color: var(--lib-black); }
 
 .page-title { font-size: 1.6rem; margin-bottom: 1.25rem; color: var(--lib-black); }
 .login-box { max-width: 380px; margin: 12vh auto 0; }
+/* ---- Пагінація, форми, службові класи (ЛР5) ---- */
+.pagination .page-link {
+    color: var(--lib-black);
+    border-color: var(--lib-blue);
+}
+.pagination .page-link:hover {
+    background: var(--lib-blue-soft);
+    color: var(--lib-black);
+}
+.pagination .page-item.active .page-link {
+    background: var(--lib-pink);
+    border-color: var(--lib-pink);
+    color: var(--lib-black);
+}
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background: var(--lib-white);
+}
+.badge.text-bg-secondary-soft {
+    background-color: var(--lib-blue) !important;
+    color: var(--lib-black) !important;
+}
+.invalid-feedback { color: #842029; }

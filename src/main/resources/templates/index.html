@@ -10,8 +10,10 @@
     <p>Ви увійшли як <strong sec:authentication="name">user</strong>.</p>
     <div class="d-flex flex-wrap gap-2">
         <a class="btn btn-lib" th:href="@{/books}">Каталог літератури</a>
+        <a class="btn btn-outline-dark" th:href="@{/profile}">Мої книги</a>
         <a class="btn btn-outline-dark" th:href="@{/issues}" sec:authorize="hasAnyRole('ADMIN','LIBRARIAN')">Видача та повернення</a>
-        <a class="btn btn-outline-dark" th:href="@{/users}" sec:authorize="hasRole('ADMIN')">Керування читачами</a>
+        <a class="btn btn-outline-dark" th:href="@{/users}" sec:authorize="hasAnyRole('ADMIN','LIBRARIAN')">Читачі</a>
+        <a class="btn btn-outline-dark" th:href="@{/books/new}" sec:authorize="hasRole('ADMIN')">Додати книгу</a>
     </div>
 </main>
 </body>

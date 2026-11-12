@@ -6,18 +6,39 @@
 <nav th:replace="~{fragments/layout :: navbar}"></nav>
 <main class="container py-4">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <h1 class="page-title">Автори</h1>
-    <table class="table table-striped bg-white">
-        <thead><tr><th>ID</th><th>Ім’я</th><th>Прізвище</th></tr></thead>
-        <tbody>
-            <tr th:each="author : ${authors}">
-                <td th:text="${author.authorId}">1</td>
-                <td th:text="${author.firstName}">Роберт</td>
-                <td th:text="${author.lastName}">Мартін</td>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="page-title mb-0">Автори</h1>
+        <a class="btn btn-lib" th:href="@{/authors/new}" sec:authorize="hasRole('ADMIN')">Додати автора</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr>
+                <th>Прізвище</th>
+                <th>Ім’я</th>
+                <th sec:authorize="hasRole('ADMIN')"></th>
             </tr>
-            <tr th:if="${#lists.isEmpty(authors)}"><td colspan="3" class="text-muted">Авторів ще немає.</td></tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <tr th:each="author : ${authors}">
+                <td th:text="${author.lastName}">Франко</td>
+                <td th:text="${author.firstName}">Іван</td>
+                <td class="text-end text-nowrap" sec:authorize="hasRole('ADMIN')">
+                    <a class="btn btn-sm btn-outline-dark" th:href="@{/authors/{id}/edit(id=${author.authorId})}">Редагувати</a>
+                    <form th:action="@{/authors/{id}/delete(id=${author.authorId})}" method="post" class="d-inline"
+                          onsubmit="return confirm('Видалити цього автора?');">
+                        <button type="submit" class="btn btn-sm btn-outline-dark">Видалити</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(authors)}">
+                <td colspan="3" class="text-muted">Авторів ще немає.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </main>
 </body>
 </html>
