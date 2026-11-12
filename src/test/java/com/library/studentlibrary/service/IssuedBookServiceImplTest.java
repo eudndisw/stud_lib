@@ -27,7 +27,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/** Unit-тести бізнес-логіки видачі/повернення. */
+/** Unit-тести бізнес-логіки видачі/повернення (без БД). */
 @ExtendWith(MockitoExtension.class)
 class IssuedBookServiceImplTest {
 
@@ -50,7 +50,7 @@ class IssuedBookServiceImplTest {
         book.setAvailableQuantity(3);
 
         lenient().when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        lenient().when(bookRepository.findById(10)).thenReturn(Optional.of(book));
+        lenient().when(bookRepository.findByIdForUpdate(10)).thenReturn(Optional.of(book));
     }
 
     @Test
@@ -105,5 +105,19 @@ class IssuedBookServiceImplTest {
 
         assertNotNull(issue.getReturnDate());
         assertEquals(3, book.getAvailableQuantity());
+    }
+
+    @Test
+    void returnBook_alreadyReturned_throws() {
+        IssuedBook issue = new IssuedBook();
+        issue.setIssueId(101);
+        issue.setUser(user);
+        issue.setBook(book);
+        issue.setIssueDate(LocalDate.now().minusDays(5));
+        issue.setReturnDate(LocalDate.now().minusDays(1));
+        when(issuedBookRepository.findById(101)).thenReturn(Optional.of(issue));
+
+        assertThrows(BusinessException.class, () -> service.returnBook(101));
+        verify(bookRepository, never()).save(any());
     }
 }

@@ -14,7 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-/** Реалізує сценарій з діаграми послідовності ЛР2: три перевірки, потім збереження. */
+/**
+ * Видача й повернення книг. Рядок книги блокується (PESSIMISTIC_WRITE),
+ * тож два бібліотекарі не можуть одночасно видати останній примірник.
+ */
 @Service
 public class IssuedBookServiceImpl implements IssuedBookService {
 
@@ -31,8 +34,15 @@ public class IssuedBookServiceImpl implements IssuedBookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<IssuedBook> getActiveIssues() {
-        return issuedBookRepository.findByReturnDateIsNull();
+        return issuedBookRepository.findByReturnDateIsNullOrderByIssueDateDescIssueIdDesc();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<IssuedBook> getUserIssues(Integer userId) {
+        return issuedBookRepository.findByUserUserIdOrderByIssueDateDescIssueIdDesc(userId);
     }
 
     @Override
@@ -40,7 +50,7 @@ public class IssuedBookServiceImpl implements IssuedBookService {
     public void issueBook(Integer userId, Integer bookId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException("Користувача не знайдено"));
-        Book book = bookRepository.findById(bookId)
+        Book book = bookRepository.findByIdForUpdate(bookId)
                 .orElseThrow(() -> new BusinessException("Книгу не знайдено"));
 
         // 1. Ліміт активних книг
@@ -74,11 +84,13 @@ public class IssuedBookServiceImpl implements IssuedBookService {
         if (issue.isReturned()) {
             throw new BusinessException("Книгу вже повернено!");
         }
+        Book book = bookRepository.findByIdForUpdate(issue.getBook().getBookId())
+                .orElseThrow(() -> new BusinessException("Книгу не знайдено"));
+
         issue.setReturnDate(LocalDate.now());
         issuedBookRepository.save(issue);
 
-        Book book = issue.getBook();
-        book.setAvailableQuantity(book.getAvailableQuantity() + 1);
+        book.setAvailableQuantity(Math.min(book.getTotalQuantity(), book.getAvailableQuantity() + 1));
         bookRepository.save(book);
     }
 }

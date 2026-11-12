@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "authors")
+@Table(name = "authors", indexes = {
+        @Index(name = "idx_authors_last_name", columnList = "last_name")
+})
 @Getter @Setter @NoArgsConstructor
 public class Author {
 

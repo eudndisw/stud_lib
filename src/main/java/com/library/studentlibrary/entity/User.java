@@ -9,7 +9,10 @@ import lombok.Setter;
 
 /** Користувач бібліотеки. Зберігає лише хеш пароля (BCrypt). */
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+        @Index(name = "idx_users_last_name", columnList = "last_name"),
+        @Index(name = "idx_users_group", columnList = "group_name")
+})
 @Getter @Setter @NoArgsConstructor
 public class User {
 
