@@ -6,29 +6,83 @@
 <nav th:replace="~{fragments/layout :: navbar}"></nav>
 <main class="container py-4">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <h1 class="page-title">Каталог літератури</h1>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="page-title mb-0">Каталог літератури</h1>
+        <a class="btn btn-lib" th:href="@{/books/new}" sec:authorize="hasRole('ADMIN')">Додати книгу</a>
+    </div>
+
+    <form th:action="@{/books}" method="get" class="row g-2 mb-3 align-items-end">
+        <div class="col-md-5">
+            <label for="q" class="form-label">Пошук</label>
+            <input id="q" name="q" type="search" class="form-control" th:value="${q}"
+                   placeholder="Назва, автор або категорія">
+        </div>
+        <div class="col-md-3">
+            <label for="sort" class="form-label">Сортувати за</label>
+            <select id="sort" name="sort" class="form-select">
+                <option value="title" th:selected="${sort == 'title'}">Назвою</option>
+                <option value="author" th:selected="${sort == 'author'}">Автором</option>
+                <option value="year" th:selected="${sort == 'year'}">Роком</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="dir" class="form-label">Порядок</label>
+            <select id="dir" name="dir" class="form-select">
+                <option value="asc" th:selected="${dir == 'asc'}">За зростанням</option>
+                <option value="desc" th:selected="${dir == 'desc'}">За спаданням</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-lib w-100">Знайти</button>
+        </div>
+    </form>
+
+    <p class="text-muted small mb-2">Знайдено: <span th:text="${books.totalElements}">0</span></p>
+
     <div class="table-responsive">
-    <table class="table table-striped align-middle bg-white">
-        <thead>
-            <tr><th>ID</th><th>Назва</th><th>Автор</th><th>Категорія</th><th>Рік</th><th>Доступно</th></tr>
-        </thead>
-        <tbody>
-            <tr th:each="book : ${books}">
-                <td th:text="${book.bookId}">1</td>
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr>
+                <th>Назва</th>
+                <th>Автор</th>
+                <th>Категорія</th>
+                <th>Рік</th>
+                <th>Стан</th>
+                <th sec:authorize="hasAnyRole('ADMIN','LIBRARIAN')">У читачів</th>
+                <th sec:authorize="hasRole('ADMIN')"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books.content}">
                 <td th:text="${book.title}">Чистий код</td>
                 <td th:text="${book.author != null} ? ${book.author.fullName} : '—'">Роберт Мартін</td>
                 <td th:text="${book.category != null} ? ${book.category.categoryName} : '—'">Програмування</td>
                 <td th:text="${book.year}">2008</td>
                 <td>
                     <span th:if="${book.available}" class="badge text-bg-success"
-                          th:text="${book.availableQuantity} + ' з ' + ${book.totalQuantity}">5 з 5</span>
+                          th:text="'Є: ' + ${book.availableQuantity} + ' з ' + ${book.totalQuantity}">Є: 5 з 5</span>
                     <span th:unless="${book.available}" class="badge text-bg-secondary">Немає в наявності</span>
                 </td>
+                <td sec:authorize="hasAnyRole('ADMIN','LIBRARIAN')">
+                    <div th:each="holder : ${holders[book.bookId]}" th:text="${holder}" class="small">Іван Петренко</div>
+                </td>
+                <td class="text-end text-nowrap" sec:authorize="hasRole('ADMIN')">
+                    <a class="btn btn-sm btn-outline-dark" th:href="@{/books/{id}/edit(id=${book.bookId})}">Редагувати</a>
+                    <form th:action="@{/books/{id}/delete(id=${book.bookId})}" method="post" class="d-inline"
+                          onsubmit="return confirm('Видалити цю книгу?');">
+                        <button type="submit" class="btn btn-sm btn-outline-dark">Видалити</button>
+                    </form>
+                </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(books)}"><td colspan="6" class="text-muted">Книг ще немає.</td></tr>
-        </tbody>
-    </table>
+            <tr th:if="${books.empty}">
+                <td colspan="7" class="text-muted">Нічого не знайдено.</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
+
+    <div th:replace="~{fragments/layout :: pager(${books}, '/books', ${q}, ${sort}, ${dir})}"></div>
 </main>
 </body>
 </html>

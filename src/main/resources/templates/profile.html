@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Мої книги')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 class="page-title">Мої книги</h1>
+
+    <p class="mb-1"><strong th:text="${user.fullName}">Іван Петренко</strong>
+        <span class="text-muted" th:if="${user.groupName != null}" th:text="'· ' + ${user.groupName}">· ІО-45</span></p>
+    <p class="text-muted small mb-4">
+        На руках: <span th:text="${active}">0</span> з <span th:text="${limit}">5</span> можливих книг.
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr><th>Книга</th><th>Дата видачі</th><th>Дата повернення</th><th>Стан</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="issue : ${issues}">
+                <td th:text="${issue.book.title}">Чистий код</td>
+                <td th:text="${issue.issueDate}">2026-11-08</td>
+                <td th:text="${issue.returnDate != null} ? ${issue.returnDate} : '—'">—</td>
+                <td>
+                    <span th:if="${issue.returned}" class="badge text-bg-secondary-soft">Повернено</span>
+                    <span th:unless="${issue.returned}" class="badge text-bg-success">На руках</span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(issues)}">
+                <td colspan="4" class="text-muted">Записів про видачі поки немає.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

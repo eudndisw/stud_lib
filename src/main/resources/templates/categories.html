@@ -6,17 +6,37 @@
 <nav th:replace="~{fragments/layout :: navbar}"></nav>
 <main class="container py-4">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <h1 class="page-title">Категорії</h1>
-    <table class="table table-striped bg-white">
-        <thead><tr><th>ID</th><th>Назва</th></tr></thead>
-        <tbody>
-            <tr th:each="category : ${categories}">
-                <td th:text="${category.categoryId}">1</td>
-                <td th:text="${category.categoryName}">Програмування</td>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="page-title mb-0">Категорії</h1>
+        <a class="btn btn-lib" th:href="@{/categories/new}" sec:authorize="hasRole('ADMIN')">Додати категорію</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr>
+                <th>Назва</th>
+                <th sec:authorize="hasRole('ADMIN')"></th>
             </tr>
-            <tr th:if="${#lists.isEmpty(categories)}"><td colspan="2" class="text-muted">Категорій ще немає.</td></tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <tr th:each="category : ${categories}">
+                <td th:text="${category.categoryName}">Програмування</td>
+                <td class="text-end text-nowrap" sec:authorize="hasRole('ADMIN')">
+                    <a class="btn btn-sm btn-outline-dark" th:href="@{/categories/{id}/edit(id=${category.categoryId})}">Редагувати</a>
+                    <form th:action="@{/categories/{id}/delete(id=${category.categoryId})}" method="post" class="d-inline"
+                          onsubmit="return confirm('Видалити цю категорію?');">
+                        <button type="submit" class="btn btn-sm btn-outline-dark">Видалити</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(categories)}">
+                <td colspan="2" class="text-muted">Категорій ще немає.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </main>
 </body>
 </html>

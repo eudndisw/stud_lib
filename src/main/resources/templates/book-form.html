@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(${pageTitle})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4" style="max-width: 640px;">
+    <h1 class="page-title" th:text="${pageTitle}">Нова книга</h1>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <form th:action="@{${formAction}}" th:object="${form}" method="post" novalidate>
+        <div class="mb-3">
+            <label for="title" class="form-label">Назва</label>
+            <input type="text" th:field="*{title}" class="form-control"
+                   th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{title}">Помилка</div>
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-6">
+                <label for="year" class="form-label">Рік видання</label>
+                <input type="number" th:field="*{year}" class="form-control"
+                       th:classappend="${#fields.hasErrors('year')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{year}">Помилка</div>
+            </div>
+            <div class="col-6">
+                <label for="totalQuantity" class="form-label">Кількість примірників</label>
+                <input type="number" th:field="*{totalQuantity}" class="form-control"
+                       th:classappend="${#fields.hasErrors('totalQuantity')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{totalQuantity}">Помилка</div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="authorId" class="form-label">Автор</label>
+            <select th:field="*{authorId}" class="form-select">
+                <option value="">— не вказано —</option>
+                <option th:each="a : ${authors}" th:value="${a.authorId}" th:text="${a.fullName}">Автор</option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label for="categoryId" class="form-label">Категорія</label>
+            <select th:field="*{categoryId}" class="form-select">
+                <option value="">— не вказано —</option>
+                <option th:each="c : ${categories}" th:value="${c.categoryId}" th:text="${c.categoryName}">Категорія</option>
+            </select>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-lib">Зберегти</button>
+            <a class="btn btn-outline-dark" th:href="@{/books}">Скасувати</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

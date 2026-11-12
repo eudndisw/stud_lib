@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Помилка')}"></head>
+<body>
+<main class="container py-5 text-center" style="max-width: 560px;">
+    <h1 class="page-title">Щось пішло не так</h1>
+    <p>Сторінку не знайдено або сталася внутрішня помилка.</p>
+    <a class="btn btn-lib" th:href="@{/}">На головну</a>
+</main>
+</body>
+</html>
